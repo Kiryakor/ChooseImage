@@ -13,7 +13,12 @@ struct ContentView: View {
     @State var progress:CGFloat = 100
     @State private var isActive = true
     @State var speed:TimeInterval = 1
-    @State var chooseText:String = "Арбуз"
+    @State var chooseText:String = ""
+    @State var tapIsActive = false
+    @State var firstImage = ""
+    @State var secondImage = ""
+    let imageArray:[String] = ["арбуз","яблоко"]
+    @State var timer:Timer?
     
     var body: some View {
         NavigationView{
@@ -22,12 +27,16 @@ struct ContentView: View {
                 Text(chooseText)
                     .font(.title)
                     .fontWeight(.medium)
-                HStack(spacing:100){
-                    Image("яблоко").onTapGesture {
-                        print("tap first")
+                HStack(spacing:50){
+                    Image(imageArray.randomElement()!).onTapGesture {
+                        self.firstImage = self.imageArray.randomElement()!
+                        self.secondImage = self.imageArray.randomElement()!
+                        self.timer?.invalidate()
                     }
-                    Image("арбуз").onTapGesture {
-                        print("tap second")
+                    Image(imageArray.randomElement()!).onTapGesture {
+                        self.firstImage = self.imageArray.randomElement()!
+                        self.secondImage = self.imageArray.randomElement()!
+                        self.timer?.invalidate()
                     }
                 }
                 Spacer(minLength: 0)
@@ -38,7 +47,10 @@ struct ContentView: View {
                     .padding(.bottom,35)
             }
             .onAppear{
-                self.createTimer()
+                self.firstImage = self.imageArray.randomElement()!
+                self.secondImage = self.imageArray.randomElement()!
+                self.chooseText = self.imageArray.randomElement()?.capitalized ?? ""
+                self.timer = self.createTimer()
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
                 self.isActive = false
@@ -50,16 +62,14 @@ struct ContentView: View {
         }
     }
     
-    func createTimer(){
-        Timer.scheduledTimer(withTimeInterval: TimeInterval(self.speed), repeats: true) { (timer) in
+    private func createTimer() -> Timer{
+        return Timer.scheduledTimer(withTimeInterval: TimeInterval(self.speed), repeats: true) { (timer) in
             guard self.isActive else { return }
             if self.progress > 0 {
-                self.progress -= 20
+                self.progress -= 5
             }else{
                 timer.invalidate()
-                self.speed -= 0.3
                 self.progress = 100
-                self.createTimer()
             }
         }
     }

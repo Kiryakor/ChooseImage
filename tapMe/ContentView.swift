@@ -12,23 +12,30 @@ struct ContentView: View {
     
     @State var progress:CGFloat = 100
     @State private var isActive = true
-    @State var a:TimeInterval = 1
+    @State var speed:TimeInterval = 1
+    @State var chooseText:String = "Арбуз"
     
     var body: some View {
         NavigationView{
             VStack(spacing:100){
                 Spacer(minLength: 0)
-                Text("Text")
+                Text(chooseText)
+                    .font(.title)
+                    .fontWeight(.medium)
                 HStack(spacing:100){
-                    Image(systemName: "table")
-                    Image(systemName: "table")
+                    Image("яблоко").onTapGesture {
+                        print("tap first")
+                    }
+                    Image("арбуз").onTapGesture {
+                        print("tap second")
+                    }
                 }
                 Spacer(minLength: 0)
                 CustomProgressView(progress: $progress)
                     .padding()
-                    .animation(.linear(duration:a))
+                    .animation(.linear(duration:speed))
                     .frame(height: 20)
-                    .padding(.bottom,15)
+                    .padding(.bottom,35)
             }
             .onAppear{
                 self.createTimer()
@@ -44,13 +51,13 @@ struct ContentView: View {
     }
     
     func createTimer(){
-        Timer.scheduledTimer(withTimeInterval: TimeInterval(self.a), repeats: true) { (timer) in
+        Timer.scheduledTimer(withTimeInterval: TimeInterval(self.speed), repeats: true) { (timer) in
             guard self.isActive else { return }
             if self.progress > 0 {
                 self.progress -= 20
             }else{
                 timer.invalidate()
-                self.a -= 0.3
+                self.speed -= 0.3
                 self.progress = 100
                 self.createTimer()
             }

@@ -22,7 +22,7 @@ struct LooseView: View {
                 .fontWeight(.medium)
             HStack(spacing: 10){
                 Button(action: {
-                    
+                    NotificationCenter.default.post(name: Notification.Name("UserLoggedIn"), object: nil)
                 }, label: {
                     Text("Новая игра")
                         .frame(width: 100, height: 20)

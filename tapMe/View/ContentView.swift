@@ -14,7 +14,6 @@ import SwiftUI
 struct ContentView: View {
     
     @State var progress:CGFloat = 100
-    @State private var isActive = true
     @State var speed:TimeInterval = 0.5
     @State var chooseText:String = ""
     @State var tapIsActive = false
@@ -22,7 +21,7 @@ struct ContentView: View {
     @State var secondImage = ""
     @State var timer:Timer?
     @State var looseGame = false
-    @State var changeProgress:CGFloat = 5
+    @State var changeProgress:CGFloat = 10
     @State var pointCount: Int = 0
     @State var opacityLooseView:Bool = false
     
@@ -77,36 +76,24 @@ struct ContentView: View {
             (Bool.random()) ? (self.chooseText = self.firstImage.capitalized) : (self.chooseText = self.secondImage.capitalized)
             self.timer = self.createTimer()
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-            self.isActive = false
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            self.isActive = true
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("UserLoggedIn"))) { _ in
+            withAnimation(.easeInOut(duration: 1.0)) {
+                self.opacityLooseView.toggle()
+            }
+            self.newGame()
         }
     }
     
     private func equelText(label:String){
         if label.lowercased() == self.chooseText.lowercased(){
+            pointCount += 1
             updateData()
         }else{
-            self.timer?.invalidate()
-            self.isActive = true
-            self.looseGame.toggle()
-            self.speed = 0
-            self.changeProgress = 0
-            self.chooseText = ""
-            self.firstImage = ""
-            self.secondImage = ""
-            withAnimation(.easeInOut(duration: 1.0)) {
-                self.opacityLooseView.toggle()
-                self.progress = 100
-            }
+            self.looseBlock()
         }
     }
     
     private func updateData(){
-        pointCount += 1
-        self.speed -= 0.01
         self.timer?.invalidate()
         self.timer = self.createTimer()
         self.firstImage = self.imageArray.randomElement()!
@@ -117,13 +104,37 @@ struct ContentView: View {
     private func createTimer() -> Timer{
         self.progress = 100
         return Timer.scheduledTimer(withTimeInterval: TimeInterval(self.speed), repeats: true) { (timer) in
-            guard self.isActive else { return }
             if self.progress > 0 {
                 self.progress -= self.changeProgress
             }else{
-                timer.invalidate()
-                self.progress = 100
+                self.looseBlock()
             }
+        }
+    }
+    
+    private func newGame(){
+        self.pointCount = 0
+        self.speed = 0.5
+        self.changeProgress = 10
+        self.looseGame.toggle()
+        self.updateData()
+        (Bool.random()) ? (self.chooseText = self.firstImage.capitalized) : (self.chooseText = self.secondImage.capitalized)
+        self.timer?.invalidate()
+        self.timer = nil
+        self.timer = self.createTimer()
+    }
+    
+    private func looseBlock(){
+        self.timer?.invalidate()
+        self.looseGame.toggle()
+        self.speed = 0
+        self.changeProgress = 0
+        self.chooseText = ""
+        self.firstImage = ""
+        self.secondImage = ""
+        withAnimation(.easeInOut(duration: 1.0)) {
+            self.opacityLooseView.toggle()
+            self.progress = 100
         }
     }
 }

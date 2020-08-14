@@ -6,6 +6,9 @@
 //  Copyright © 2020 Кирилл. All rights reserved.
 //
 
+
+//MARK: сделать чистку кода и декомпозицию всего 
+
 import SwiftUI
 
 struct ContentView: View {
@@ -18,34 +21,41 @@ struct ContentView: View {
     @State var firstImage = ""
     @State var secondImage = ""
     @State var timer:Timer?
+    @State var looseGame = false
+    @State var changeProgress:CGFloat = 5
     
     let imageArray:[String] = ["арбуз","яблоко","киви","банан","авокадо","баклажан","груша","капуста","кукуруза","малина","помидор","редис","салат"]
     
     var body: some View {
         NavigationView{
-            VStack(spacing:100){
-                Spacer(minLength: 0)
-                Text(chooseText)
-                    .font(.title)
-                    .fontWeight(.medium)
-                HStack(spacing:50){
-                    Image(firstImage)
-                        .onTapGesture {
-                            self.updateData()
-                        }
-                    .frame(width: 100, height: 100)
-                    Image(secondImage)
-                        .onTapGesture {
-                            self.updateData()
-                        }
-                    .frame(width: 100, height: 100)
+            ZStack{
+                VStack(spacing:100){
+                    Spacer(minLength: 0)
+                    Text(chooseText)
+                        .font(.title)
+                        .fontWeight(.medium)
+                    HStack(spacing:50){
+                        Image(firstImage)
+                            .onTapGesture {
+                                self.equelText(label: self.firstImage)
+                            }
+                            .frame(width: 100, height: 100)
+                        Image(secondImage)
+                            .onTapGesture {
+                                self.equelText(label: self.secondImage)
+                            }
+                            .frame(width: 100, height: 100)
+                    }
+                    Spacer(minLength: 0)
+                    CustomProgressView(progress: $progress)
+                        .padding()
+                        .animation(.linear(duration:speed))
+                        .frame(height: 20)
+                        .padding(.bottom,35)
                 }
-                Spacer(minLength: 0)
-                CustomProgressView(progress: $progress)
-                    .padding()
-                    .animation(.linear(duration:speed))
-                    .frame(height: 20)
-                    .padding(.bottom,35)
+                if looseGame{
+                    //Красивый Алерт сделать, когда ты проиграл
+                }
             }
             .onAppear{
                 self.updateData()
@@ -60,6 +70,22 @@ struct ContentView: View {
             }
             .navigationBarTitle("Game name")
         }
+//        .alert(isPresented: $looseGame) {
+//             Alert(title: Text("Important message"), message: Text("Wear sunscreen"), dismissButton: .default(Text("Got it!")))
+//        }
+    }
+    
+    private func equelText(label:String){
+        if label.lowercased() == self.chooseText.lowercased(){
+            updateData()
+        }else{
+            self.timer?.invalidate()
+            self.isActive = true
+            self.looseGame.toggle()
+            self.speed = 0
+            self.changeProgress = 0
+            updateData()
+        }
     }
     
     private func updateData(){
@@ -68,8 +94,6 @@ struct ContentView: View {
         self.firstImage = self.imageArray.randomElement()!
         self.secondImage = self.imageArray.randomElement()!
         (Bool.random()) ? (self.chooseText = self.firstImage.capitalized) : (self.chooseText = self.secondImage.capitalized)
-        
-        //запилить проверку
     }
     
     private func createTimer() -> Timer{
@@ -77,7 +101,7 @@ struct ContentView: View {
         return Timer.scheduledTimer(withTimeInterval: TimeInterval(self.speed), repeats: true) { (timer) in
             guard self.isActive else { return }
             if self.progress > 0 {
-                self.progress -= 5
+                self.progress -= self.changeProgress
             }else{
                 timer.invalidate()
                 self.progress = 100

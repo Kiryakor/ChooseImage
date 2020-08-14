@@ -15,13 +15,9 @@ struct CustomProgressView: View {
     var body: some View{
         GeometryReader { (geo) in
             ZStack(alignment: .trailing){
-                
-                ZStack{
-                    Capsule()
-                        .fill(Color.black.opacity(0.08))
-                        .frame(height: 20)
-                }
-                
+                Capsule()
+                    .fill(Color.black.opacity(0.08))
+                    .frame(height: 20)
                 Capsule()
                     .fill(Color.blue)
                     .frame(width: geo.size.width * self.progress / 100)
@@ -30,9 +26,12 @@ struct CustomProgressView: View {
     }
 }
 
-//struct CustomProgressView_Previews: PreviewProvider {
-//    
-//    static var previews: some View {
-//        CustomProgressView().previewLayout(.fixed(width: 400, height: 40))
-//    }
-//}
+
+struct CustomProgressView_Previews: PreviewProvider {
+    
+    @State static var progress:CGFloat = 80
+    
+    static var previews: some View {
+        CustomProgressView(progress: $progress).previewLayout(.fixed(width: 500, height: 20))
+    }
+}

@@ -29,6 +29,8 @@ struct ContentView: View {
     
     var body: some View {
         ZStack{
+            LinearGradient(gradient: .init(colors: [.white,.gray]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                .edgesIgnoringSafeArea(.top)
             VStack{
                 HStack {
                     Text("Game name")

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct CustomProgressView: View {
+struct ProgressView: View {
     
     @Binding var progress:CGFloat
     
@@ -27,11 +27,11 @@ struct CustomProgressView: View {
 }
 
 
-struct CustomProgressView_Previews: PreviewProvider {
+struct ProgressView_Previews: PreviewProvider {
     
     @State static var progress:CGFloat = 80
     
     static var previews: some View {
-        CustomProgressView(progress: $progress).previewLayout(.fixed(width: 500, height: 20))
+        ProgressView(progress: $progress).previewLayout(.fixed(width: 500, height: 20))
     }
 }

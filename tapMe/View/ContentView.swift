@@ -7,7 +7,7 @@
 //
 
 
-//MARK: сделать чистку кода и декомпозицию всего 
+//MARK: сделать чистку кода и декомпозицию всего
 
 import SwiftUI
 
@@ -23,6 +23,8 @@ struct ContentView: View {
     @State var timer:Timer?
     @State var looseGame = false
     @State var changeProgress:CGFloat = 5
+    @State var pointCount: Int = 0
+    @State var opacityLooseView:Bool = false
     
     let imageArray:[String] = ["арбуз","яблоко","киви","банан","авокадо","баклажан","груша","капуста","кукуруза","малина","помидор","редис","салат"]
     
@@ -47,14 +49,18 @@ struct ContentView: View {
                             .frame(width: 100, height: 100)
                     }
                     Spacer(minLength: 0)
-                    CustomProgressView(progress: $progress)
+                    ProgressView(progress: $progress)
                         .padding()
                         .animation(.linear(duration:speed))
                         .frame(height: 20)
                         .padding(.bottom,35)
                 }
                 if looseGame{
-                    //Красивый Алерт сделать, когда ты проиграл
+                    LooseView(count: $pointCount)
+                        .frame(width: 300, height: 200)
+                        .background(Color.gray)
+                        .cornerRadius(15)
+                        .opacity(opacityLooseView ? 1 : 0)
                 }
             }
             .onAppear{
@@ -70,13 +76,11 @@ struct ContentView: View {
             }
             .navigationBarTitle("Game name")
         }
-//        .alert(isPresented: $looseGame) {
-//             Alert(title: Text("Important message"), message: Text("Wear sunscreen"), dismissButton: .default(Text("Got it!")))
-//        }
     }
     
     private func equelText(label:String){
         if label.lowercased() == self.chooseText.lowercased(){
+            pointCount += 1
             updateData()
         }else{
             self.timer?.invalidate()
@@ -85,6 +89,12 @@ struct ContentView: View {
             self.speed = 0
             self.changeProgress = 0
             updateData()
+            self.chooseText = ""
+            self.firstImage = ""
+            self.secondImage = ""
+            withAnimation(.easeInOut(duration: 1.0)) {
+                self.opacityLooseView.toggle()
+            }
         }
     }
     

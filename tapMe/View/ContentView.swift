@@ -29,10 +29,18 @@ struct ContentView: View {
     let imageArray:[String] = ["арбуз","яблоко","киви","банан","авокадо","баклажан","груша","капуста","кукуруза","малина","помидор","редис","салат"]
     
     var body: some View {
-        NavigationView{
-            ZStack{
-                VStack(spacing:100){
-                    Spacer(minLength: 0)
+        ZStack{
+            VStack{
+                HStack {
+                    Text("Game name")
+                        .font(.system(size: 35))
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.leading)
+                        .padding([.top, .leading],50)
+                    Spacer()
+                }
+                Spacer(minLength: 0)
+                VStack(spacing: 70) {
                     Text(chooseText)
                         .font(.title)
                         .fontWeight(.medium)
@@ -48,39 +56,37 @@ struct ContentView: View {
                             }
                             .frame(width: 100, height: 100)
                     }
-                    Spacer(minLength: 0)
-                    ProgressView(progress: $progress)
-                        .padding()
-                        .animation(.linear(duration:speed))
-                        .frame(height: 20)
-                        .padding(.bottom,35)
                 }
-                if looseGame{
-                    LooseView(count: $pointCount)
-                        .frame(width: 300, height: 200)
-                        .background(Color.gray)
-                        .cornerRadius(15)
-                        .opacity(opacityLooseView ? 1 : 0)
-                }
+                Spacer(minLength: 0)
+                ProgressView(progress: $progress)
+                    .padding()
+                    .animation(.linear(duration:speed))
+                    .frame(height: 20)
+                    .padding(.bottom,35)
             }
-            .onAppear{
-                self.updateData()
-                (Bool.random()) ? (self.chooseText = self.firstImage.capitalized) : (self.chooseText = self.secondImage.capitalized)
-                self.timer = self.createTimer()
+            if looseGame{
+                LooseView(count: $pointCount)
+                    .frame(width: 300, height: 200)
+                    .background(Color.gray)
+                    .cornerRadius(15)
+                    .opacity(opacityLooseView ? 1 : 0)
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                self.isActive = false
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                self.isActive = true
-            }
-            .navigationBarTitle("Game name")
+        }
+        .onAppear{
+            self.updateData()
+            (Bool.random()) ? (self.chooseText = self.firstImage.capitalized) : (self.chooseText = self.secondImage.capitalized)
+            self.timer = self.createTimer()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+            self.isActive = false
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            self.isActive = true
         }
     }
     
     private func equelText(label:String){
         if label.lowercased() == self.chooseText.lowercased(){
-            pointCount += 1
             updateData()
         }else{
             self.timer?.invalidate()
@@ -88,17 +94,19 @@ struct ContentView: View {
             self.looseGame.toggle()
             self.speed = 0
             self.changeProgress = 0
-            updateData()
             self.chooseText = ""
             self.firstImage = ""
             self.secondImage = ""
             withAnimation(.easeInOut(duration: 1.0)) {
                 self.opacityLooseView.toggle()
+                self.progress = 100
             }
         }
     }
     
     private func updateData(){
+        pointCount += 1
+        self.speed -= 0.01
         self.timer?.invalidate()
         self.timer = self.createTimer()
         self.firstImage = self.imageArray.randomElement()!

@@ -28,6 +28,7 @@ struct MenuView: View {
                         .foregroundColor(Color.black)
                         .font(.headline)
                         .padding()
+                        .padding(.horizontal)
                         .background(Color.blue)
                         .cornerRadius(20)
                 })
@@ -35,6 +36,7 @@ struct MenuView: View {
                 Spacer(minLength: 0)
             }
         }
+        .edgesIgnoringSafeArea(.all)
     }
 }
 

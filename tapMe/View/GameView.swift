@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct GameView: View {
     
     @State var progress:CGFloat = 100
     @State var speed:TimeInterval = 0.5
@@ -77,6 +77,7 @@ struct ContentView: View {
             }
             self.newGame()
         }
+        .edgesIgnoringSafeArea(.all)
     }
     
     private func equelText(label:String){
@@ -136,6 +137,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        GameView()
     }
 }

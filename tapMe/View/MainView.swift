@@ -15,7 +15,7 @@ struct MainView: View {
     var body: some View {
         ZStack{
             if startGame{
-                ContentView()
+                GameView()
             }else{
                 MenuView(startGame: $startGame)
             }

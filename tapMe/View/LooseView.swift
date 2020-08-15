@@ -30,6 +30,7 @@ struct LooseView: View {
                     .background(Color.blue)
                     .cornerRadius(20)
             })
+            .shadow(radius: 10)
         }
     }
 }

@@ -15,9 +15,10 @@ struct MenuView: View {
     var body: some View {
         ZStack{
             LinearGradient(gradient: .init(colors: [.white,.gray]), startPoint: .topLeading, endPoint: .bottomTrailing)
-            .edgesIgnoringSafeArea(.top)
+                .edgesIgnoringSafeArea(.top)
             VStack{
                 GameNameView()
+                    .shadow(radius: 5)
                 Spacer(minLength: 0)
                 Button(action: {
                     self.startGame.toggle()
@@ -30,6 +31,7 @@ struct MenuView: View {
                         .background(Color.blue)
                         .cornerRadius(20)
                 })
+                    .shadow(radius: 10)
                 Spacer(minLength: 0)
             }
         }

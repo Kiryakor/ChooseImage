@@ -63,6 +63,7 @@ struct ContentView: View {
                     .background(Color.gray)
                     .cornerRadius(15)
                     .opacity(opacityLooseView ? 1 : 0)
+                    .shadow(radius: 5)
             }
         }
         .onAppear{

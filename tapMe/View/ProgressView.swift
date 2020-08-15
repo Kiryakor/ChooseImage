@@ -19,7 +19,7 @@ struct ProgressView: View {
                     .fill(Color.black.opacity(0.08))
                     .frame(height: 20)
                 Capsule()
-                    .fill(Color.blue)
+                    .fill(LinearGradient(gradient: .init(colors: [.blue,.black]), startPoint: .leading, endPoint: .trailing))
                     .frame(width: geo.size.width * self.progress / 100)
             }
         }

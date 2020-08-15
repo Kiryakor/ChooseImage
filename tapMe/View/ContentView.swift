@@ -30,14 +30,7 @@ struct ContentView: View {
     var body: some View {
         ZStack{
             VStack{
-                HStack {
-                    Text("Game name")
-                        .font(.system(size: 35))
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.leading)
-                        .padding([.top, .leading],50)
-                    Spacer()
-                }
+                GameNameView()
                 Spacer(minLength: 0)
                 VStack(spacing: 70) {
                     Text(chooseText)

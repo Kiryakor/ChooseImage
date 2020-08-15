@@ -13,21 +13,25 @@ struct MenuView: View {
    @Binding var startGame:Bool
     
     var body: some View {
-        VStack{
-            GameNameView()
-            Spacer(minLength: 0)
-            Button(action: {
-                self.startGame.toggle()
-            }, label: {
-                Text("Start game")
-                    .fontWeight(.regular)
-                    .foregroundColor(Color.black)
-                    .font(.headline)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(20)
-            })
-            Spacer(minLength: 0)
+        ZStack{
+            LinearGradient(gradient: .init(colors: [.white,.gray]), startPoint: .topLeading, endPoint: .bottomTrailing)
+            .edgesIgnoringSafeArea(.top)
+            VStack{
+                GameNameView()
+                Spacer(minLength: 0)
+                Button(action: {
+                    self.startGame.toggle()
+                }, label: {
+                    Text("Start game")
+                        .fontWeight(.regular)
+                        .foregroundColor(Color.black)
+                        .font(.headline)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(20)
+                })
+                Spacer(minLength: 0)
+            }
         }
     }
 }

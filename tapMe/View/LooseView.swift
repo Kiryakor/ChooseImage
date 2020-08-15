@@ -20,28 +20,16 @@ struct LooseView: View {
             Text("Ваш счёт: \(count)")
                 .font(.callout)
                 .fontWeight(.medium)
-            HStack(spacing: 10){
-                Button(action: {
-                    NotificationCenter.default.post(name: Notification.Name("UserLoggedIn"), object: nil)
-                }, label: {
-                    Text("Новая игра")
-                        .frame(width: 100, height: 20)
-                        .padding()
-                        .foregroundColor(Color.black)
-                        .background(Color.blue)
-                        .cornerRadius(20)
-                })
-                Button(action: {
-                    
-                }, label: {
-                    Text("Магазин")
-                        .frame(width: 100, height: 20)
-                        .padding()
-                        .foregroundColor(Color.black)
-                        .background(Color.blue)
-                        .cornerRadius(20)
-                })
-            }
+            Button(action: {
+                NotificationCenter.default.post(name: Notification.Name("UserLoggedIn"), object: nil)
+            }, label: {
+                Text("Новая игра")
+                    .frame(width: 100, height: 20)
+                    .padding()
+                    .foregroundColor(Color.black)
+                    .background(Color.blue)
+                    .cornerRadius(20)
+            })
         }
     }
 }

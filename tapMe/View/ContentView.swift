@@ -15,14 +15,13 @@ struct ContentView: View {
     
     @State var progress:CGFloat = 100
     @State var speed:TimeInterval = 0.5
+    @State var changeProgress:CGFloat = 10
+    @State var pointCount: Int = 0
     @State var chooseText:String = ""
-    @State var tapIsActive = false
     @State var firstImage = ""
     @State var secondImage = ""
     @State var timer:Timer?
     @State var looseGame = false
-    @State var changeProgress:CGFloat = 10
-    @State var pointCount: Int = 0
     @State var opacityLooseView:Bool = false
     
     let imageArray:[String] = ["арбуз","яблоко","киви","банан","авокадо","баклажан","груша","капуста","кукуруза","малина","помидор","редис","салат"]
